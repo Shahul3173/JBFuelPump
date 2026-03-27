@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Overpass API failed, using checkpoint coords:', err);
             }
 
-            const res = await fetch(`http://router.project-osrm.org/route/v1/driving/${lng},${lat};${targetLng},${targetLat}?overview=full&geometries=geojson`);
+            const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${lng},${lat};${targetLng},${targetLat}?overview=full&geometries=geojson`);
             const data = await res.json();
             if (data && data.routes && data.routes.length > 0) {
                 const route = data.routes[0];
