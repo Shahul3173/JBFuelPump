@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB Petrol Calculator - Is it worth it?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Fuel<span class="highlight">Sync</span> JB</h1>
+            <p>Calculate your real savings when pumping petrol in Johor Bahru.</p>
+        </header>
+
+        <main>
+            <div class="glass-card inputs-panel">
+                
+                <!-- Section 1: Currency & Fuel -->
+                <section class="input-section">
+                    <h2><span class="icon">💰</span> Currency & Fuel Rates</h2>
+                    <div class="grid">
+                        <div class="input-group">
+                            <label for="exchangeRate">1 SGD = (MYR) <small class="status-indicator" id="rateStatus">Fetching...</small></label>
+                            <input type="number" id="exchangeRate" step="0.0001" value="0.0000">
+                        </div>
+                    </div>
+                    
+                    <div class="grid col-2 mt-small">
+                        <div class="input-group">
+                            <label for="sgFuelType">SG Fuel Grade</label>
+                            <select id="sgFuelType">
+                                <option value="92">92</option>
+                                <option value="95" selected>95</option>
+                                <option value="98">98</option>
+                                <option value="premium">Premium</option>
+                                <option value="diesel">Diesel</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="myFuelType">MY Fuel Grade</label>
+                            <select id="myFuelType">
+                                <option value="ron_95_budi">RON 95 (Budi)</option>
+                                <option value="ron_95">RON 95</option>
+                                <option value="ron_97" selected>RON 97</option>
+                                <option value="ron_100">RON 100</option>
+                                <option value="v_power_racing">V-Power Racing</option>
+                                <option value="diesel_euro_5_b10">Diesel Euro 5 B10</option>
+                                <option value="diesel_euro_5_b10_east">Diesel Euro 5 B10 (East)</option>
+                                <option value="diesel_euro_5_b7">Diesel Euro 5 B7</option>
+                                <option value="diesel_euro_5_b7_east">Diesel Euro 5 B7 (East)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid col-2 mt-small">
+                        <div class="input-group highlight-my">
+                            <label>SG Fuel Price ($) <span class="status-indicator" id="sgFuelStatus">Live Data</span></label>
+                            <input type="number" id="sgPumpPrice" step="0.01" value="0.00">
+                        </div>
+                        <div class="input-group highlight-my">
+                            <label>MY Fuel Price (RM) <span class="status-indicator" id="myFuelStatus">Live Data</span></label>
+                            <input type="number" id="myPumpPrice" step="0.01" value="0.00">
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <!-- Section 2: Vehicle & Travel -->
+                <section class="input-section">
+                    <h2><span class="icon">🚗</span> Vehicle & Travel</h2>
+                    <div class="grid col-2">
+                        <div class="input-group">
+                            <label for="fuelToPump">Fuel to Pump (Liters)</label>
+                            <input type="number" id="fuelToPump" value="40" min="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="fuelEconomy">Fuel Economy (km/L)</label>
+                            <input type="number" id="fuelEconomy" value="12" min="1">
+                        </div>
+                        <div class="input-group full-width">
+                            <label for="postalCode">Your Start Location (SG) <span class="status-indicator" id="locationStatus" style="display:none;">Found</span></label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="text" id="postalCode" placeholder="Postal Code (e.g. 730001)" maxlength="6" style="flex: 1;">
+                                <button type="button" id="getLocationBtn" class="secondary-btn">📍 Auto</button>
+                            </div>
+                            <small id="calculatedDistanceLabel" style="color: var(--primary); text-align: right; margin-top: 0.2rem; font-weight: 600; font-size: 0.85rem;">Distance to go: -- km</small>
+                            <small id="calculatedTimeLabel" style="color: #a5d6ff; text-align: right; margin-top: 0.2rem; font-size: 0.85rem; display: none;">Est. Travel Time: -- mins</small>
+                            <div id="map" style="height: 250px; width: 100%; border-radius: 8px; margin-top: 1rem; display: none; z-index: 1;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <!-- Section 3: Route & Time -->
+                <section class="input-section">
+                    <h2><span class="icon">🛣️</span> Route & Opportunity Cost</h2>
+                    <div class="grid col-2">
+                        <div class="input-group">
+                            <label for="checkpoint">Checkpoint / Route</label>
+                            <select id="checkpoint">
+                                <option value="woodlands">Woodlands Causeway</option>
+                                <option value="tuas">Tuas Second Link</option>
+                            </select>
+                            <small id="checkpointTollsInfo" style="color: var(--primary); font-weight: 600; display: block; margin-top: 0.5rem;"></small>
+                        </div>
+                        <div class="input-group">
+                            <label for="myRoadCharge">MY Road Charge (RM)</label>
+                            <input type="number" id="myRoadCharge" value="20.00" disabled>
+                        </div>
+                    </div>
+                </section>
+
+                <button id="calculateBtn" class="primary-btn">Calculate Savings</button>
+
+            </div>
+
+            <div class="glass-card results-panel" id="resultsPanel">
+                <div class="verdict-banner" id="verdictBanner">
+                    <h2 id="verdictText">Calculating...</h2>
+                    <p id="verdictSubtext">We are crunching the numbers.</p>
+                </div>
+                
+                <div class="breakdown">
+                    <h3>Cost Breakdown (in SGD)</h3>
+                    <ul>
+                        <li>Cost if Pumping in SG: <span class="val-right" id="resSGCost">$0.00</span></li>
+                        <li>Cost of Fuel pumped in JB: <span class="val-right" id="resJBCost">$0.00</span></li>
+                        <li>Cost of Fuel used for Travel: <span class="val-right" id="resTravelCost">$0.00</span></li>
+                        <li>Round Trip Tolls & Charges: <span class="val-right" id="resTolls">$0.00</span></li>
+                        <li class="total-row">Total Cost of JB Trip: <span class="val-right" id="resTotalJbCost">$0.00</span></li>
+                    </ul>
+                </div>
+
+                <div class="breakdown mt-medium time-cost">
+                    <h3>Net Savings</h3>
+                    <ul>
+                        <li class="total-row final-net">Total Financial Savings: <span class="val-right" id="resFinancialNet">$0.00</span></li>
+                    </ul>
+                </div>
+                
+                <div class="alternatives mt-medium">
+                    <h3>💡 Smarter Alternatives</h3>
+                    <p>Consider staying in SG with discounts: SPC, Esso, or Caltex cards often give up to <span class="highlight">22-25% off</span> SG pump prices without the stressful queues.</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Note: API data is synced periodically. Foreign vehicles must pump RON97 or Diesel in MY.</p>
+        </footer>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>
