@@ -4,6 +4,7 @@ A full-stack web application that helps Singapore drivers determine whether it i
 
 By combining live fuel price data, exchange rates, travel costs, and vehicle efficiency, the app provides a clear and realistic estimate of actual savings — turning a common real-world dilemma into a data-driven decision.
 
+Done by: Shahul Hameed and Mohammad Ilham
 ---
 
 ## 🌟 Why This Project Matters
