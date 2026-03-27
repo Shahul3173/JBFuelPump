@@ -3,6 +3,9 @@
 A full-stack web application that helps Singapore drivers determine whether it is financially worth travelling to Johor Bahru (JB) to pump fuel.
 
 By combining live fuel price data, exchange rates, travel costs, and vehicle efficiency, the app provides a clear and realistic estimate of actual savings — turning a common real-world dilemma into a data-driven decision.
+## Live Demo
+View the live app:
+https://jb-petrol-calc.vercel.app
 
 Done by: Shahul Hameed and Mohammad Ilham
 ---
