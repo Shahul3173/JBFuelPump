@@ -1,5 +1,3 @@
-# JBFuelPump
-A website that will help evaluate if it is worthwhile entering into JB to pump petrol
 # 🚗 FuelSync JB — Smart Fuel Cost Calculator for Singapore Drivers
 
 A full-stack web application that helps Singapore drivers determine whether it is financially worth travelling to Johor Bahru (JB) to pump fuel.
