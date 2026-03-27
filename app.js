@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             elements.sgFuelStatus.textContent = 'Fetching...';
             elements.myFuelStatus.textContent = 'Fetching...';
-            const res = await fetch('http://localhost:3000/api/fuel-prices');
+            const res = await fetch('/api/fuel-prices');
             if (!res.ok) throw new Error('Local backend proxy failed');
             const data = await res.json();
 
